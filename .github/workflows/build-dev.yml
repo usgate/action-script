@@ -28,6 +28,7 @@ jobs:
           git clone "$APP_GIT_URL"
           # 截取仓库名
           repo_name=$(basename "$APP_GIT_URL" .git)
+          ls -a
           mv "$repo_name"/* .
           mkdir .github/cert
           mv "$repo_name"/.github/cert/* .github/cert/

@@ -9,9 +9,9 @@ jobs:
     env:
       SHEME: Runner
       BUILD_CONFIGURATION: Release
-      TEAM_ID: ${{ secrets.TEAM_ID }}
-      PROVISIONING_PROFILE: ${{ secrets.PROVISIONING_PROFILE }}
-      CODE_SIGN_IDENTITY: ${{ secrets.CODE_SIGN_IDENTITY }}
+      TEAM_ID: "${{ secrets.TEAM_ID }}"
+      PROVISIONING_PROFILE: "${{ secrets.PROVISIONING_PROFILE }}"
+      CODE_SIGN_IDENTITY: "${{ secrets.CODE_SIGN_IDENTITY }}"
 
     steps:
       - name: Checkout the code
@@ -19,10 +19,10 @@ jobs:
 
       - name: Prepare for build
         run: |
-          KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
-          SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}
+          KEYCHAIN_PASSWORD="${{ secrets.KEYCHAIN_PASSWORD }}"
+          SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
           APP_GIT_URL="git@github.com:ShinyLinkage/circle_group_app.git"
-          echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa
           git clone "$APP_GIT_URL"

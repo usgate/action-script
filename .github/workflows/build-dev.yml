@@ -21,7 +21,7 @@ jobs:
         run: |
           KEYCHAIN_PASSWORD="${{ secrets.KEYCHAIN_PASSWORD }}"
           SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
-          APP_GIT_URL="git@github.com:ShinyLinkage/circle_group_app.git"
+          APP_GIT_URL="${{ secrets.APP_GIT_URL }}"
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa

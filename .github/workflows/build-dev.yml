@@ -28,8 +28,10 @@ jobs:
           git clone "$APP_GIT_URL"
           # 截取仓库名
           repo_name=$(basename "$APP_GIT_URL" .git)
-          ls -a
           mv "$repo_name"/* .
+          cd $repo_name
+          echo "当前目录：$(pwd)"
+          ls -a
           mkdir .github/cert
           mv "$repo_name"/.github/cert/* .github/cert/
           PP_WIDGET_PATH=.github/cert/IMDevPPWidget.mobileprovision

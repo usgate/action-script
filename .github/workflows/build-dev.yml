@@ -22,6 +22,7 @@ jobs:
           KEYCHAIN_PASSWORD=${{ secrets.KEYCHAIN_PASSWORD }}
           SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}
           APP_GIT_URL=${{ secrets.APP_GIT_URL }}
+          echo $APP_GIT_URL
           echo "$SSH_PRIVATE_KEY" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-add ~/.ssh/id_rsa

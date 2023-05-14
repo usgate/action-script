@@ -34,9 +34,6 @@ jobs:
 
       - name: Prepare for build
         run: |
-          echo "--------------------"
-          echo ${{ env.description }}
-          echo "--------------------"
           KEYCHAIN_PASSWORD="${{ secrets.KEYCHAIN_PASSWORD }}"
           SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
           APP_GIT_URL="${{ secrets.APP_GIT_URL }}"
@@ -46,7 +43,6 @@ jobs:
           GIT_CURL_VERBOSE=1 git clone "$APP_GIT_URL"
           # 截取仓库名
           repo_name=$(basename "$APP_GIT_URL" .git)
-          echo "仓库名$repo_name"
           mv "$repo_name"/* .
           chmod +x ci/ios/script/init-cert.sh
           # 执行脚本安装证书

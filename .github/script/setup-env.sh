@@ -3,7 +3,7 @@
 if [ "$1" == 'app-store' ]; then
   echo "environment=production" >> $GITHUB_ENV
 fi
-if [ "$2" == 'production' ]; then
+if [ "$2" == 'production' ] || [ "$1" == 'app-store' ]; then
   echo "description=正式站" >> $GITHUB_ENV
 else
   echo "description=测试站" >> $GITHUB_ENV

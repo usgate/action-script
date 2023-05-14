@@ -4,11 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       method:
+        type: chioce
         description: '打包方式(development/ad-hoc/app-store)'
         required: true
         default: 'development'
         options: [ 'development', 'ad-hoc', 'app-store' ]
       environment:
+        type: chioce
         description: 'api环境(develop/production)'
         required: true
         default: 'develop'

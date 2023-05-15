@@ -85,4 +85,4 @@ jobs:
         with:
           _api_key: ${{ secrets.PGY_KEY }}
           appFilePath: build-output/ios/duidui.ipa
-          buildUpdateDescription: "${{ env.description }} - ${{ github.event.inputs.method }}"
+          buildUpdateDescription: "${{ env.description }} - ${{ github.event.inputs.method }} (自动发布)"

@@ -1,7 +1,25 @@
-name: build ios-dev
+name: build ios
 
 on:
   workflow_dispatch:
+    inputs:
+      method:
+        type: choice
+        description: '打包方式(development/ad-hoc/app-store)'
+        required: true
+        default: 'development'
+        options:
+          - development
+          - ad-hoc
+          - app-store
+      environment:
+        type: choice
+        description: 'api环境(develop/production)'
+        required: true
+        default: 'develop'
+        options:
+          - develop
+          - production
 
 jobs:
   build_ios:
@@ -9,10 +27,17 @@ jobs:
     env:
       SHEME: Runner
       BUILD_CONFIGURATION: Release
+      environment: ${{ github.event.inputs.environment }}
+      description: "正式站"
 
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+
+      - name: setup env
+        run: |
+          chmod +x .github/script/setup-env.sh
+          source .github/script/setup-env.sh ${{ github.event.inputs.method }} ${{ github.event.inputs.environment }}
 
       - name: Prepare for build
         run: |
@@ -25,13 +50,10 @@ jobs:
           GIT_CURL_VERBOSE=1 git clone "$APP_GIT_URL"
           # 截取仓库名
           repo_name=$(basename "$APP_GIT_URL" .git)
-          echo "仓库名$repo_name"
           mv "$repo_name"/* .
-          mkdir .github/cert
-          mv "$repo_name"/.github/cert/* .github/cert/
-          chmod +x .github/script/init-cert.sh
+          chmod +x ci/ios/script/init-cert.sh
           # 执行脚本安装证书
-          source .github/script/init-cert.sh dev
+          source ci/ios/script/init-cert.sh ${{ github.event.inputs.method }} ${{ env.environment }}
 
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v2
@@ -53,15 +75,14 @@ jobs:
       - name: Build xArchive
         run: |
           xcodebuild -workspace ios/Runner.xcworkspace -scheme ${{ env.SHEME }} -configuration ${{ env.BUILD_CONFIGURATION }} DEVELOPMENT_TEAM=$TEAM_ID_APP -sdk 'iphoneos16.2' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$PROVISIONING_PROFILE_APP clean archive CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY_APP"
-      - name: Export ipa
-        run: xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/$EXPORT_OPTION_FILE
 
-      - name: push ipa to server
-        uses: appleboy/scp-action@master
+      - name: Export ipa
+        run: |
+          xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
+
+      - name: upload to pgyer
+        uses: PGYER/pgyer-upload-app-action@v1.3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          source: build-output/ios/
-          target: /home/ios
+          _api_key: ${{ secrets.PGY_KEY }}
+          appFilePath: build-output/ios/duidui.ipa
+          buildUpdateDescription: "${{ env.description }} - ${{ github.event.inputs.method }}"

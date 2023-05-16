@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: setup env
         run: |
@@ -81,7 +81,7 @@ jobs:
           xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
 
       - name: upload to pgyer
-        uses: PGYER/pgyer-upload-app-action@v1.3
+        uses: usgate/pgyer-upload-app-action@v1.3
         with:
           _api_key: ${{ secrets.PGY_KEY }}
           appFilePath: build-output/ios/duidui.ipa

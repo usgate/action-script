@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Checkout the code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: setup env
         run: |
@@ -74,14 +74,14 @@ jobs:
 
       - name: Build xArchive
         run: |
-          xcodebuild -workspace ios/Runner.xcworkspace -scheme ${{ env.SHEME }} -configuration ${{ env.BUILD_CONFIGURATION }} DEVELOPMENT_TEAM=$TEAM_ID_APP -sdk 'iphoneos16.2' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$PROVISIONING_PROFILE_APP clean archive CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY_APP"
+          xcodebuild -workspace ios/Runner.xcworkspace -scheme ${{ env.SHEME }} -configuration ${{ env.BUILD_CONFIGURATION }} DEVELOPMENT_TEAM=$TEAM_ID_APP -sdk 'iphoneos' -destination 'generic/platform=iOS' -archivePath build-output/app.xcarchive PROVISIONING_PROFILE=$PROVISIONING_PROFILE_APP clean archive CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY_APP"
 
       - name: Export ipa
         run: |
           xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
 
       - name: upload to pgyer
-        uses: PGYER/pgyer-upload-app-action@v1.3
+        uses: usgate/pgyer-upload-app-action@v1.3.2
         with:
           _api_key: ${{ secrets.PGY_KEY }}
           appFilePath: build-output/ios/duidui.ipa

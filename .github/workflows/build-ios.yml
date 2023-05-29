@@ -55,6 +55,18 @@ jobs:
           # 执行脚本安装证书
           source ci/ios/script/init-cert.sh ${{ github.event.inputs.method }} ${{ env.environment }}
 
+      - name: Cache Flutter packages
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.HOME }}/.pub-cache
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: Cache CocoaPods dependencies
+        uses: actions/cache@v2
+        with:
+          path: Pods
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('**/Podfile.lock') }}
+
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v2
         with:

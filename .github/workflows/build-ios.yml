@@ -94,6 +94,9 @@ jobs:
       - name: Export ipa
         run: |
           xcodebuild -exportArchive -archivePath build-output/app.xcarchive -exportPath build-output/ios -exportOptionsPlist ios/ExportOptions.plist
+          cd build-output/ios
+          ls
+          cd ../..
 
       - name: upload to pgyer
         uses: usgate/pgyer-upload-app-action@v1.3.2

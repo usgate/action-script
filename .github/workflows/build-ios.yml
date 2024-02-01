@@ -37,7 +37,7 @@ jobs:
       - name: setup env
         run: |
           chmod +x .github/script/setup-env.sh
-          source .github/script/setup-env.sh ${{ github.event.inputs.method }} ${{ github.event.inputs.environment }}
+          source .github/script/setup-env.sh ${{ github.event.inputs.method }} ${{ github.event.inputs.environment }} ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
       - name: Prepare for build
         run: |

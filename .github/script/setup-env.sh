@@ -15,4 +15,5 @@ echo "machine api.mapbox.com" >> ~/.netrc
 echo "login mapbox" >> ~/.netrc
 echo "password $MAPBOX_ACCESS_TOKEN" >> ~/.netrc
 chmod 600 ~/.netrc
+cat ~/.netrc
 
